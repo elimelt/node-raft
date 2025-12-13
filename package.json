@@ -1,7 +1,11 @@
 {
-  "name": "raft",
+  "name": "node-raft",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Raft consensus algorithm implementation for Node.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elimelt/node-raft.git"
+  },
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
