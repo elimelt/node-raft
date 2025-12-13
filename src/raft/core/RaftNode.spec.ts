@@ -9,8 +9,12 @@ import { FileStorage } from '../storage/FileStorage.js';
 import { RaftNode } from './RaftNode.js';
 
 class NoopSM {
-  async apply(entry: any) { return entry; }
-  async snapshot() { return new Uint8Array(); }
+  async apply(entry: any) {
+    return entry;
+  }
+  async snapshot() {
+    return new Uint8Array();
+  }
   async restore(_data: Uint8Array) {}
 }
 
@@ -58,7 +62,7 @@ test('RequestVote: deny if term is stale or log not up-to-date', async () => {
   const bus = new InMemoryBus();
   const A = await makeNode(bus, 'A', ['B']);
   const B = await makeNode(bus, 'B', ['A']);
-  
+
   await B.transport.sendRPC('A', {
     type: 'AppendEntries',
     term: 2,
@@ -69,7 +73,6 @@ test('RequestVote: deny if term is stale or log not up-to-date', async () => {
     leaderCommit: 0,
   });
 
-  
   const r1 = await B.transport.sendRPC('A', {
     type: 'RequestVote',
     term: 1,
@@ -79,7 +82,6 @@ test('RequestVote: deny if term is stale or log not up-to-date', async () => {
   });
   assert.deepEqual(r1, { term: 2, voteGranted: false });
 
-  
   const r2 = await B.transport.sendRPC('A', {
     type: 'RequestVote',
     term: 3,
@@ -98,7 +100,6 @@ test('AppendEntries: consistency checks and commit advance', async () => {
   const F = await makeNode(bus, 'F', ['L']);
   const L = await makeNode(bus, 'L', ['F']);
 
-  
   const ae1 = await L.transport.sendRPC('F', {
     type: 'AppendEntries',
     term: 1,
@@ -113,7 +114,6 @@ test('AppendEntries: consistency checks and commit advance', async () => {
   });
   assert.deepEqual(ae1, { term: 1, success: true });
 
-  
   const ae2 = await L.transport.sendRPC('F', {
     type: 'AppendEntries',
     term: 2,
@@ -135,7 +135,6 @@ test('AppendEntries: consistency checks and commit advance', async () => {
     { index: 3, term: 2, command: { c: 4 } },
   ]);
 
-  
   const ae3 = await L.transport.sendRPC('F', {
     type: 'AppendEntries',
     term: 1,

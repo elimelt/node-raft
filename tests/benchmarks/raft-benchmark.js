@@ -68,7 +68,7 @@ async function main() {
   const t0 = performance.now();
   for (let i = 1; i <= total; i++) {
     const entry = { index: i, term: 1, command: { n: i } };
-  await Promise.all([
+    await Promise.all([
       B.transport.sendRPC('A', {
         type: 'AppendEntries',
         term: 1,

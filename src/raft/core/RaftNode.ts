@@ -153,15 +153,19 @@ export class RaftNode {
       for (let i = 0; i < entries.length; i++) {
         const e = entries[i]!;
         const ex = existingRange.find((x) => x.index === e.index);
-        if (ex && ex.term !== e.term) { conflictIndex = e.index; break; }
+        if (ex && ex.term !== e.term) {
+          conflictIndex = e.index;
+          break;
+        }
       }
       if (conflictIndex !== null) {
         await this.storage.deleteEntriesFrom(conflictIndex);
       }
       const toAppend: LogEntry[] = [];
-      const base = conflictIndex !== null
-        ? existingRange.filter((x) => x.index < conflictIndex)
-        : existingRange;
+      const base =
+        conflictIndex !== null
+          ? existingRange.filter((x) => x.index < conflictIndex)
+          : existingRange;
       for (const e of entries) {
         const ex = base.find((x) => x.index === e.index);
         if (!ex) toAppend.push(e);

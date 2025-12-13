@@ -69,14 +69,17 @@ export class FileStorage implements Storage {
           } else if (rec && rec.type === 'truncate' && typeof rec.fromIndex === 'number') {
             const from = rec.fromIndex as number;
             for (let i = entries.length - 1; i >= 0; i--) {
-              if (entries[i]!.index >= from) entries.pop(); else break;
+              if (entries[i]!.index >= from) entries.pop();
+              else break;
             }
           } else if (rec && rec.type === 'trim' && typeof rec.upToIndex === 'number') {
             trimPrefixUpTo = Math.max(trimPrefixUpTo, rec.upToIndex as number);
           }
         } catch {}
       }
-      this.logCache = entries.filter((e) => e.index > trimPrefixUpTo).sort((a, b) => a.index - b.index);
+      this.logCache = entries
+        .filter((e) => e.index > trimPrefixUpTo)
+        .sort((a, b) => a.index - b.index);
       this.rebuildIndex();
       return this.logCache;
     } catch {
@@ -91,8 +94,6 @@ export class FileStorage implements Storage {
       return this.logCache;
     }
   }
-
-  
 
   private scheduleFlush() {
     if (this.flushTimer) return;
@@ -118,7 +119,9 @@ export class FileStorage implements Storage {
   async compactAOF(): Promise<void> {
     await this.flush();
     const entries = this.logCache ?? [];
-    const lines = entries.map((e) => JSON.stringify({ type: 'append', entry: e })).join('\n') + (entries.length ? '\n' : '');
+    const lines =
+      entries.map((e) => JSON.stringify({ type: 'append', entry: e })).join('\n') +
+      (entries.length ? '\n' : '');
     await fs.writeFile(this.logAOFPath, lines, 'utf8');
   }
 
@@ -182,7 +185,9 @@ export class FileStorage implements Storage {
     const trimmed = log.filter((e) => e.index > snapshot.lastIncludedIndex);
     this.logCache = trimmed;
     this.rebuildIndex();
-    this.pendingOps.push(JSON.stringify({ type: 'trim', upToIndex: snapshot.lastIncludedIndex }) + '\n');
+    this.pendingOps.push(
+      JSON.stringify({ type: 'trim', upToIndex: snapshot.lastIncludedIndex }) + '\n'
+    );
     this.scheduleFlush();
     // Compact AOF after snapshot to keep replay fast
     await this.compactAOF();

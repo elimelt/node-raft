@@ -254,10 +254,7 @@ test('Correctness: random simulations preserve core invariants', async () => {
       }
 
       let steps = 0;
-      while (steps < 200 && (await net.step())) {
-        steps++;
-      }
-
+      while (steps < 200 && (await net.step())) steps++;
       const tally = net.voteTally.get(t) ?? new Map();
       const winners = Array.from(tally.entries()).filter(([, set]) => set.size >= majority(N));
       assert.ok(winners.length <= 1, `election safety violated in term ${t}`);

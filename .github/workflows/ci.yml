@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ '**' ]
+    branches: ['**']
 
 jobs:
   build-test:
@@ -32,4 +32,3 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: MC_ENABLE=1 MC_TIMEOUT_MS=5000 MC_MAX_PATHS=200 MC_BRANCH_LIMIT=4 MC_NODES=3 MC_CANDIDATES=2 MC_ENTRIES=2 node --test --test-reporter=spec tests/correctness/model_checker.spec.js
-

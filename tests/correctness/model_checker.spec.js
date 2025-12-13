@@ -104,7 +104,6 @@ async function destroyCluster(nodes) {
   await Promise.all(nodes.map((n) => n.node.stop()));
 }
 
-
 function majority(n) {
   return Math.floor(n / 2) + 1;
 }
@@ -114,7 +113,6 @@ async function deliver(nodeMap, msg) {
   if (!h) throw new Error('handler missing');
   return h({ ...msg.message, from: msg.from });
 }
-
 
 function computeWinners(nodes, term) {
   const votes = new Map();
@@ -263,7 +261,7 @@ const MC_MAX_PATHS = parseInt(process.env.MC_MAX_PATHS ?? '2000', 10);
 const run = MC_ENABLED ? test : test.skip;
 
 run('Model checker: BFS over vote delivery orders and replication interleavings', async () => {
-    const abort = new AbortController();
+  const abort = new AbortController();
   const to = setTimeout(() => abort.abort(), MC_TIMEOUT_MS);
   const N = parseInt(process.env.MC_NODES ?? '3', 10);
   const C = Math.min(parseInt(process.env.MC_CANDIDATES ?? '2', 10), N);
@@ -293,13 +291,13 @@ run('Model checker: BFS over vote delivery orders and replication interleavings'
       for (const step of order) {
         await deliver(nodes, voteMsgs[step]);
       }
-            const winners = computeWinners(nodes, term);
+      const winners = computeWinners(nodes, term);
       assert.ok(winners.length <= 1, `Election safety violated: ${winners}`);
       if (winners.length === 1) {
         const leader = winners[0];
         await replicateAll(nodes, leader, E, term, BR);
       }
-            for (const b of backups) {
+      for (const b of backups) {
         const node = nodes.find((n) => n.id === b.id);
         node.storage.state = JSON.parse(JSON.stringify(b.state));
         node.node['commitIndex'] = b.commit;

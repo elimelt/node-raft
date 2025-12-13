@@ -21,7 +21,11 @@ export class MemoryStorage implements Storage {
   }
 
   async loadState(): Promise<PersistentState> {
-    return { currentTerm: this.state.currentTerm, votedFor: this.state.votedFor, log: [...this.state.log] };
+    return {
+      currentTerm: this.state.currentTerm,
+      votedFor: this.state.votedFor,
+      log: [...this.state.log],
+    };
   }
 
   async appendEntries(entries: LogEntry[]): Promise<void> {
@@ -70,4 +74,3 @@ export class MemoryStorage implements Storage {
     return this.snapshotObj;
   }
 }
-

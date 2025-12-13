@@ -12,8 +12,12 @@ import { MemoryStorage } from '../dist/raft/storage/MemoryStorage.js';
 import { RaftNode } from '../dist/raft/core/RaftNode.js';
 
 class NoopSM {
-  async apply(entry) { return entry; }
-  async snapshot() { return new Uint8Array(); }
+  async apply(entry) {
+    return entry;
+  }
+  async snapshot() {
+    return new Uint8Array();
+  }
   async restore() {}
 }
 
@@ -27,7 +31,12 @@ async function makeNode(bus, id, peers) {
   const storage = new FileStorage(tmpDir(`raft-${id}`));
   const storageType = process.env.PROFILE_STORAGE;
   const storageSelected = storageType === 'memory' ? new MemoryStorage() : storage;
-  const node = new RaftNode({ nodeId: id, peers, electionTimeoutMin: 1e9, electionTimeoutMax: 1e9 }, new NoopSM(), transport, storageSelected);
+  const node = new RaftNode(
+    { nodeId: id, peers, electionTimeoutMin: 1e9, electionTimeoutMax: 1e9 },
+    new NoopSM(),
+    transport,
+    storageSelected
+  );
   await node.start();
   return { node, transport, storage: storageSelected, id };
 }
@@ -75,8 +84,12 @@ async function main() {
     await fs.mkdir(profDir, { recursive: true });
     session = new Session();
     session.connect();
-    await new Promise((resolve, reject) => session.post('Profiler.enable', {}, (err) => (err ? reject(err) : resolve())));
-    await new Promise((resolve, reject) => session.post('Profiler.start', {}, (err) => (err ? reject(err) : resolve())));
+    await new Promise((resolve, reject) =>
+      session.post('Profiler.enable', {}, (err) => (err ? reject(err) : resolve()))
+    );
+    await new Promise((resolve, reject) =>
+      session.post('Profiler.start', {}, (err) => (err ? reject(err) : resolve()))
+    );
   }
   loopHist.enable();
   const t0 = performance.now();
@@ -112,7 +125,9 @@ async function main() {
   const cpuUserMs = cpu1.user / 1000;
   const cpuSystemMs = cpu1.system / 1000;
 
-  function nsToMs(ns) { return ns / 1e6; }
+  function nsToMs(ns) {
+    return ns / 1e6;
+  }
   const elMean = nsToMs(loopHist.mean);
   const elP95 = nsToMs(loopHist.percentile(95));
   const elP99 = nsToMs(loopHist.percentile(99));
@@ -124,7 +139,9 @@ async function main() {
   console.log(`- Duration: ${durMs.toFixed(1)} ms  (${opsPerSec.toFixed(1)} ops/sec)`);
   console.log(`- CPU: user=${cpuUserMs.toFixed(1)} ms, system=${cpuSystemMs.toFixed(1)} ms`);
   console.log(`- Memory: rss=${rssMB.toFixed(1)} MB, heapUsed=${heapMB.toFixed(1)} MB`);
-  console.log(`- EventLoop delay: mean=${elMean.toFixed(2)} ms, p95=${elP95.toFixed(2)} ms, p99=${elP99.toFixed(2)} ms`);
+  console.log(
+    `- EventLoop delay: mean=${elMean.toFixed(2)} ms, p95=${elP95.toFixed(2)} ms, p99=${elP99.toFixed(2)} ms`
+  );
   if (session) {
     const result = await new Promise((resolve, reject) =>
       session.post('Profiler.stop', {}, (err, params) => (err ? reject(err) : resolve(params)))

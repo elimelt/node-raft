@@ -23,7 +23,13 @@ function runWithCpuProf(target, dir, name, env = {}) {
     const args = [target];
     const child = spawn(process.execPath, args, {
       stdio: 'inherit',
-      env: { ...process.env, ...env, PROFILE_CPUPROF: '1', PROFILE_CPUPROF_DIR: dir, PROFILE_CPUPROF_NAME: name },
+      env: {
+        ...process.env,
+        ...env,
+        PROFILE_CPUPROF: '1',
+        PROFILE_CPUPROF_DIR: dir,
+        PROFILE_CPUPROF_NAME: name,
+      },
     });
     child.on('exit', (code) => {
       if (code === 0) resolve();

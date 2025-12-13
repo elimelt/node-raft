@@ -52,7 +52,7 @@ function processLog(logPath) {
 
 function printSummary(text) {
   const lines = text.split(/\r?\n/);
-  const start = lines.findIndex((l) => l.includes('Statistical profiling result')); 
+  const start = lines.findIndex((l) => l.includes('Statistical profiling result'));
   const end = lines.findIndex((l, i) => i > start && l.trim().startsWith(' [Shared libraries]'));
   const section = start >= 0 ? lines.slice(start, end > start ? end : undefined) : lines;
   console.log('==== V8 Prof Summary ====');

@@ -12,7 +12,7 @@ module.exports = {
   overrides: [
     {
       files: ['tests/**/*.js'],
-      env: { node: true }
+      env: { node: true },
     },
   ],
   rules: {
@@ -23,7 +23,7 @@ module.exports = {
     'unused-imports/no-unused-imports': 'error',
     'unused-imports/no-unused-vars': [
       'error',
-      { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
+      { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
     ],
     'no-inline-comments': 'error',
   },

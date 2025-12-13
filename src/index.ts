@@ -23,4 +23,3 @@ export type {
   InstallSnapshot,
   InstallSnapshotResponse,
 } from './raft/transport/MessageTypes.js';
-
