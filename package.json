@@ -1,0 +1,44 @@
+{
+  "name": "raft",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "npm run build --silent && node --test --test-reporter=spec dist/**/*.spec.js tests/**/*.spec.js",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "bench": "npm run build --silent && node tests/benchmarks/raft-benchmark.js",
+    "mc": "npm run build --silent && MC_ENABLE=1 node --test --test-reporter=spec tests/correctness/model_checker.spec.js",
+    "lint": "eslint . --ext .ts,.js",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "profile": "npm run build --silent && node scripts/run-prof.js",
+    "profile:flame": "npm run build --silent && node scripts/run-cpuprof.js",
+    "prepare": "husky install"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
+  "sideEffects": false,
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^25.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.49.0",
+    "@typescript-eslint/parser": "^8.49.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-unused-imports": "^4.3.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.7.4"
+  }
+}

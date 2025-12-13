@@ -1,0 +1,17 @@
+node_modules
+dist
+profiles
+raft-data
+isolate-*.log
+*.cpuprofile
+.DS_Store
+.env
+.env.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tsbuildinfo
+coverage
+.vscode
+.idea
