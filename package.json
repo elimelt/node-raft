@@ -20,6 +20,7 @@
     "typecheck": "tsc --noEmit",
     "profile": "npm run build --silent && node scripts/run-prof.js",
     "profile:flame": "npm run build --silent && node scripts/run-cpuprof.js",
+    "prepublishOnly": "npm run typecheck && npm run lint && npm test",
     "prepare": "husky install"
   },
   "exports": {
